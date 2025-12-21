@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Supabase 경마 게임</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #f0f0f0; }
+        #main-container { display: flex; gap: 20px; margin-top: 20px; width: 900px; }
+        
+        /* 트랙 설정 */
+        #track-area { flex: 2; background: #fff; padding: 10px; border: 2px solid #333; position: relative; }
+        .lane { height: 40px; border-bottom: 1px dashed #ccc; position: relative; display: flex; align-items: center; }
+        .horse { position: absolute; left: 0; transition: left 0.05s linear; font-size: 24px; white-space: nowrap; }
+        .finish-line { position: absolute; right: 10px; top: 0; bottom: 0; width: 5px; background: red; }
+
+        /* 기록판 설정 */
+        #scoreboard { flex: 1; background: #333; color: white; padding: 15px; border-radius: 8px; min-height: 450px; }
+        #history-list { list-style: none; padding: 0; font-size: 0.9em; max-height: 400px; overflow-y: auto; }
+        #history-list li { margin-bottom: 8px; border-bottom: 1px solid #555; padding-bottom: 5px; }
+
+        button { margin-top: 20px; padding: 15px 40px; font-size: 18px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; }
+        button:disabled { background: #ccc; }
+    </style>
+</head>
+<body>
+
+    <h1>🐎 10마리 경마 게임</h1>
+
+    <div id="main-container">
+        <div id="track-area">
+            <div class="finish-line"></div>
+            </div>
+
+        <div id="scoreboard">
+            <h3>🏆 경기 기록 (Supabase)</h3>
+            <ul id="history-list">
+                <li>데이터 로딩 중...</li>
+            </ul>
+        </div>
+    </div>
+
+    <button id="start-btn">경마 시작!</button>
+
+    <script>
+        // 1. Supabase 설정 (본인의 정보로 교체해야 함)
+        const SUPABASE_URL = 'https://zwgznwoywgvlyujbmdwx.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3Z3pud295d2d2bHl1amJtZHd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5NTEyNTMsImV4cCI6MjA4MTUyNzI1M30.m_7wSDQZLNFgJzY5Xq4HcJbCJmRyp9D4s4wTWtNp0Mc';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const trackArea = document.getElementById('track-area');
+        const startBtn = document.getElementById('start-btn');
+        const historyList = document.getElementById('history-list');
+        const horseCount = 10;
+        let isRacing = false;
+
+        // 말 생성
+        for (let i = 1; i <= horseCount; i++) {
+            const lane = document.createElement('div');
+            lane.className = 'lane';
+            lane.innerHTML = `<div class="horse" id="horse${i}" style="left: 0px;">🐎<sup>${i}</sup></div>`;
+            trackArea.appendChild(lane);
+        }
+
+        // 초기 데이터 로드
+        loadHistory();
+
+        // [기능 1] 기록 불러오기
+        async function loadHistory() {
+            const { data, error } = await _supabase
+                .from('race_results')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                historyList.innerHTML = '<li>연결 설정을 확인하세요.</li>';
+                return;
+            }
+
+            historyList.innerHTML = '';
+            data.forEach((row, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${data.length - index}R</strong>: ${row.ranks}`;
+                historyList.appendChild(li);
+            });
+        }
+
+        // [기능 2] 경기 시작
+        startBtn.onclick = () => {
+            if (isRacing) return;
+            isRacing = true;
+            startBtn.disabled = true;
+
+            const horses = document.querySelectorAll('.horse');
+            const trackWidth = trackArea.clientWidth - 50;
+            let finishedHorses = [];
+            
+            // 말 위치 초기화
+            horses.forEach(h => h.style.left = '0px');
+
+            const timer = setInterval(() => {
+                horses.forEach(horse => {
+                    let currentPos = parseInt(horse.style.left);
+                    
+                    if (currentPos < trackWidth) {
+                        let speed = Math.random() * 8; // 랜덤 속도
+                        let newPos = currentPos + speed;
+                        horse.style.left = newPos + 'px';
+
+                        if (newPos >= trackWidth && !finishedHorses.includes(horse.id.replace('horse', ''))) {
+                            finishedHorses.push(horse.id.replace('horse', ''));
+                        }
+                    }
+                });
+
+                if (finishedHorses.length === horseCount) {
+                    clearInterval(timer);
+                    saveResult(finishedHorses);
+                }
+            }, 30);
+        };
+
+        // [기능 3] 결과 저장
+        async function saveResult(ranks) {
+            const rankString = ranks.join(' > ');
+            
+            // 현재 몇 라운드인지 계산 (기록 개수 + 1)
+            const { count } = await _supabase.from('race_results').select('*', { count: 'exact', head: true });
+            
+            const { error } = await _supabase
+                .from('race_results')
+                .insert([{ round: (count || 0) + 1, ranks: rankString }]);
+
+            if (error) console.error('저장 실패:', error);
+            
+            await loadHistory();
+            isRacing = false;
+            startBtn.disabled = false;
+            alert("경기 종료! 결과가 기록되었습니다.");
+        }
+    </script>
+</body>
+</html>
