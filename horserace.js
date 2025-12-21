@@ -1,5 +1,5 @@
 // 1. Supabase 설정 (본인의 URL과 Anon Key 입력)
-const _supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+const _supabase = supabase.createClient('https://zwgznwoywgvlyujbmdwx.supabase.co9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3Z3pud295d2d2bHl1amJtZHd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5NTEyNTMsImV4cCI6MjA4MTUyNzI1M30.m_7wSDQZLNFgJzY5Xq4HcJbCJmRyp9D4s4wTWtNp0Mc')
 
 // 2. 경기 결과 DB에 저장하기
 async function saveResultToSupabase(ranks) {
