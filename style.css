@@ -2,8 +2,8 @@
 body { 
      font-family: 'Pretendard', sans-serif; 
      display: flex; flex-direction: column; 
-     align-items: center; background: #ffffff; 
-     color: rgb(206, 55, 55); margin: 0; padding: 20px; 
+     align-items: center; background: #fca3a3; 
+     color: rgb(255, 255, 255); margin: 0; padding: 20px; 
 }
 
 #main-container { 
