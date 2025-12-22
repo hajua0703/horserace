@@ -13,17 +13,26 @@
         <img src="말달리자.png" alt="경마 게임" style="width: 300px;"> 
     </div>
 
-    <div id="track-area">
-        </div>
+    <div id="track-area"></div>
 
     <div style="text-align: center; margin: 20px;">
         <button id="start-btn">경주 시작!</button>
     </div>
 
     <div id="results">
-        <h3>경기 기록 - TOP 3</h3>
-        <ul id="record-list">
-            </ul>
+        <h3>📊 경기 기록 - TOP 3</h3>
+        <table id="rank-table">
+            <thead>
+                <tr>
+                    <th>라운드</th>
+                    <th>1등 🥇</th>
+                    <th>2등 🥈</th>
+                    <th>3등 🥉</th>
+                </tr>
+            </thead>
+            <tbody id="record-body">
+                </tbody>
+        </table>
     </div>
 
     <script src="horserace.js"></script>

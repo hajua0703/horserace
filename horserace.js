@@ -5,13 +5,13 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const trackArea = document.getElementById('track-area');
 const startBtn = document.getElementById('start-btn');
-const recordList = document.getElementById('record-list'); // HTML ID와 일치시킴
+const recordBody = document.getElementById('record-body'); // 표 본문 ID
 const horseCount = 10;
 let isRacing = false;
 
 // 2. 말 생성 및 초기화
 function initHorses() {
-    trackArea.innerHTML = ''; // 기존 트랙 초기화
+    trackArea.innerHTML = ''; 
     for (let i = 1; i <= horseCount; i++) {
         const lane = document.createElement('div');
         lane.className = 'lane';
@@ -26,7 +26,7 @@ function initHorses() {
     }
 }
 
-// 3. 기록판 불러오기 (상위 3등만 가공해서 표시)
+// 3. 기록판 불러오기 (표 형식으로 1~3등만 표시)
 async function loadHistory() {
     const { data, error } = await _supabase
         .from('race_results')
@@ -34,23 +34,31 @@ async function loadHistory() {
         .order('created_at', { ascending: false });
 
     if (error) {
-        if (recordList) recordList.innerHTML = '<li>기록을 불러올 수 없습니다.</li>';
+        console.error('기록 로드 실패:', error);
         return;
     }
 
-    if (recordList) {
-        recordList.innerHTML = '';
+    if (recordBody) {
+        recordBody.innerHTML = '';
         data.forEach((row) => {
-            const li = document.createElement('li');
-            // 저장된 순위 문자열 "1, 2, 3..."에서 1~3등만 추출
-            const top3 = row.ranks.split(', ').slice(0, 3).join(' > ');
-            li.innerHTML = `<strong>${row.round}R</strong>: ${top3}`;
-            recordList.appendChild(li);
+            const tr = document.createElement('tr');
+            
+            // 저장된 순위 문자열을 배열로 변환 (", " 구분자 기준)
+            const ranksArray = row.ranks.split(', ');
+            
+            // 1~3등 데이터만 추출하여 테이블 행 생성
+            tr.innerHTML = `
+                <td>${row.round}R</td>
+                <td class="rank-1st">${ranksArray[0]}번</td>
+                <td class="rank-2nd">${ranksArray[1]}번</td>
+                <td class="rank-3rd">${ranksArray[2]}번</td>
+            `;
+            recordBody.appendChild(tr);
         });
     }
 }
 
-// 4. 경기 결과 저장 (자동 라운드 계산)
+// 4. 경기 결과 저장
 async function saveResultToSupabase(ranks) {
     const { count } = await _supabase.from('race_results').select('*', { count: 'exact', head: true });
     const nextRound = (count || 0) + 1;
@@ -69,7 +77,7 @@ async function saveResultToSupabase(ranks) {
     startBtn.disabled = false;
 }
 
-// 5. 경기 시작 로직 (박진감 넘치는 역전 기능)
+// 5. 경기 시작 로직
 if (startBtn) {
     startBtn.onclick = () => {
         if (isRacing) return;
@@ -117,6 +125,5 @@ if (startBtn) {
     };
 }
 
-// 페이지 로드 시 초기화
 initHorses();
 loadHistory();

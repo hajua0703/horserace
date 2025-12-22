@@ -1,79 +1,59 @@
-/* style.css 내용 */
+/* 기본 배경 및 폰트 */
 body { 
-     font-family: 'Pretendard', sans-serif; 
-     display: flex; flex-direction: column; 
-     align-items: center; background: rgb(84, 108, 145); 
-     color: rgb(255, 255, 255); margin: 0; padding: 20px; 
+    font-family: 'Pretendard', sans-serif; 
+    display: flex; flex-direction: column; 
+    align-items: center; background: rgb(84, 108, 145); 
+    color: rgb(255, 255, 255); margin: 0; padding: 20px; 
 }
 
-#main-container { 
-     display: flex; gap: 20px; 
-     width: 95%; 
-     max-width: 1400px; 
-     margin-top: 10px; 
-}
-
-/* 트랙 너비를 늘림 */
-#track-area {
-    width: 95%;        /* 화면의 95%를 사용해서 트랙을 길게 만듭니다 */
-    max-width: 1200px; /* 너무 넓어지지 않게 최대치 설정 */
-    margin: 20px auto;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid #fff;
-    position: relative;
-    padding-right: 50px; /* 피니시 라인 여유 공간 */
-}
-
-/* 제목 이미지 중앙 정렬 */
+/* 상단 제목 이미지 */
 .header-image {
     text-align: center;
     margin-top: 20px;
 }
 
-/* 아래로 옮긴 기록실 디자인 */
-#results {
-    margin-top: 30px;
-    width: 80%;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 15px;
-    border-radius: 10px;
+/* 경마 트랙 구역 */
+#track-area {
+    width: 95%;        
+    max-width: 1200px; 
+    margin: 20px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #fff;
+    position: relative;
+    padding-right: 50px; 
 }
 
+/* 레인 스타일 */
 .lane { 
-     height: 50px; 
-     border-bottom: 1px solid #555; 
-     position: relative; 
-     display: flex; 
-     align-items: center; 
-     background-image: linear-gradient(to right, #555 1px, transparent 1px); 
-     background-size: 100px 100%; 
+    height: 60px; /* 말 크기에 맞춰 약간 키움 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
 }
 
-/* 말이 담긴 컨테이너를 한 덩어리로 만듭니다 */
+/* 말 컨테이너 (번호 + 이미지) */
 .horse-container {
     display: flex;
-    align-items: center; /* 번호와 이미지를 세로 중앙 정렬 */
-    gap: 5px;            /* 번호와 이미지 사이의 간격 */
+    align-items: center; 
+    gap: 8px;            
 }
 
-/* 말 번호 스타일 */
 .horse-number {
     font-weight: bold;
     font-size: 18px;
-    color: #ffffff;      /* 번호 색상 (배경에 맞춰 조절) */
-    text-shadow: 2px 2px 4px #000000; /* 번호가 잘 보이도록 그림자 추가 */
-    min-width: 25px;     /* 번호가 차지하는 최소 너비 */
+    color: #ffffff;      
+    text-shadow: 2px 2px 4px #000000; 
+    min-width: 25px;     
     text-align: right;
 }
 
-/* 말 이미지 스타일 */
 .horse-img {
-    width: 80px;         /* 말 크기 조절 */
+    width: 70px;         
     height: auto;
     display: block;
 }
 
-/* 기존 .horse의 내용은 유연하게 유지 */
 .horse {
     position: absolute;
     left: 0;
@@ -81,59 +61,51 @@ body {
     z-index: 2;
 }
 
-.finish-line {
-    position: absolute;
-    right: 20px;
-    top: 0;
-    bottom: 0;
-    width: 15px;
-    background: red; /* 요청하신 대로 깔끔한 빨간색 */
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); /* 은은한 붉은 광채 */
-}
-     
-#scoreboard { 
-     flex: 1; 
-     background: #1a1a1a; 
-     padding: 20px; 
-     border-radius: 10px; 
-     border: 2px solid #edaf19; 
-     max-height: 600px; 
-     overflow-y: auto;
- }
-
-#history-list { 
-     list-style: none; 
-     padding: 0; 
-}
-
-#history-list li {
-      background: #333; 
-      margin-bottom: 10px; 
-      padding: 10px; 
-      border-radius: 5px; 
-      font-size: 13px; 
-      border-left: 5px solid #edaf19; 
-     }
-
+/* 시작 버튼 */
 button { 
-     margin-top: 30px; 
-     padding: 15px 60px; 
-     font-size: 22px; 
-     font-weight: bold; 
-     cursor: pointer; 
-     background: #edaf19; 
-     color: #1a1a1a; 
-     border: none; 
-     border-radius: 50px; 
-     transition: transform 0.2s, background 0.2s; 
+    margin: 20px 0; 
+    padding: 15px 60px; 
+    font-size: 22px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    background: #edaf19; 
+    color: #1a1a1a; 
+    border: none; 
+    border-radius: 50px; 
+    transition: transform 0.2s, background 0.2s; 
 }
 
-button:hover {
-      background: #f39c12; 
-      transform: scale(1.05); 
-     }
+button:hover { background: #f39c12; transform: scale(1.05); }
+button:disabled { background: #777; cursor: not-allowed; }
 
-button:disabled { 
-     background: #777; 
-     cursor: not-allowed;
- }
+/* 📊 경기 기록 표 스타일 */
+#results {
+    margin-top: 30px;
+    width: 95%;
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #edaf19;
+}
+
+#results h3 { text-align: center; margin-top: 0; color: #edaf19; }
+
+#rank-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    text-align: center;
+}
+
+#rank-table th, #rank-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#rank-table th { background: rgba(237, 175, 25, 0.2); color: #edaf19; }
+
+/* 순위별 텍스트 강조 */
+.rank-1st { color: #ffd700; font-weight: bold; font-size: 1.1em; } /* 금색 */
+.rank-2nd { color: #c0c0c0; font-weight: bold; }                 /* 은색 */
+.rank-3rd { color: #cd7f32; font-weight: bold; }                 /* 동색 */
