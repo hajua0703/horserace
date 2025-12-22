@@ -2,30 +2,13 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Supabase 경마 게임</title>
+    <title>t산솦's 경마 게임</title>
+    <link rel="stylesheet" href="style.css"> 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #f0f0f0; }
-        #main-container { display: flex; gap: 20px; margin-top: 20px; width: 900px; }
-        
-        /* 트랙 설정 */
-        #track-area { flex: 2; background: #fff; padding: 10px; border: 2px solid #333; position: relative; }
-        .lane { height: 40px; border-bottom: 1px dashed #ccc; position: relative; display: flex; align-items: center; }
-        .horse { position: absolute; left: 0; transition: left 0.05s linear; font-size: 24px; white-space: nowrap; }
-        .finish-line { position: absolute; right: 10px; top: 0; bottom: 0; width: 5px; background: red; }
-
-        /* 기록판 설정 */
-        #scoreboard { flex: 1; background: #333; color: white; padding: 15px; border-radius: 8px; min-height: 450px; }
-        #history-list { list-style: none; padding: 0; font-size: 0.9em; max-height: 400px; overflow-y: auto; }
-        #history-list li { margin-bottom: 8px; border-bottom: 1px solid #555; padding-bottom: 5px; }
-
-        button { margin-top: 20px; padding: 15px 40px; font-size: 18px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; }
-        button:disabled { background: #ccc; }
-    </style>
 </head>
 <body>
 
-    <h1>🐎 10마리 경마 게임</h1>
+    <h1>🐎 산솦's 경마 게임 🐎</h1>
 
     <div id="main-container">
         <div id="track-area">
@@ -33,7 +16,7 @@
             </div>
 
         <div id="scoreboard">
-            <h3>🏆 경기 기록 (Supabase)</h3>
+            <h3>🏆 경기 기록 🏆</h3>
             <ul id="history-list">
                 <li>데이터 로딩 중...</li>
             </ul>

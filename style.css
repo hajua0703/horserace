@@ -1,9 +1,99 @@
-/* 트랙을 화면 가득 채우기 */
-        #main-container { width: 95%; max-width: 1200px; } 
-        #track-area { flex: 3; min-height: 500px; }
-        
-        /* 결승선 근처에서 긴장감을 주기 위해 배경에 눈금 추가 */
-        .lane {
-            background-image: linear-gradient(to right, #eee 1px, transparent 1px);
-            background-size: 50px 100%; /* 50px마다 세로줄 */
-        }
+/* style.css 내용 */
+body { 
+     font-family: 'Pretendard', sans-serif; 
+     display: flex; flex-direction: column; 
+     align-items: center; background: #2c3e50; 
+     color: white; margin: 0; padding: 20px; 
+}
+
+#main-container { 
+     display: flex; gap: 20px; 
+     width: 95%; 
+     max-width: 1400px; 
+     margin-top: 10px; 
+}
+
+#track-area { 
+     flex: 3;
+     background: #444; 
+     padding: 20px 10px; 
+     border: 4px solid #edaf19; 
+     position: relative; 
+     border-radius: 10px; 
+     box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+}
+
+.lane { 
+     height: 50px; 
+     border-bottom: 1px solid #555; 
+     position: relative; 
+     display: flex; 
+     align-items: center; 
+     background-image: linear-gradient(to right, #555 1px, transparent 1px); 
+     background-size: 100px 100%; 
+}
+
+.horse { 
+     position: absolute; 
+     left: 0; font-size: 30px;
+      transition: left 0.1s linear; 
+      z-index: 2; 
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      }
+
+.finish-line { 
+     position: absolute;
+      right: 20px; 
+      top: 0; 
+      bottom: 0;
+       width: 10px; 
+       background: repeating-linear-gradient(45deg, #ff0000, #ff0000 5px, #ffffff 5px, #ffffff 10px);
+        box-shadow: 0 0 10px #ff0000; 
+     }
+     
+#scoreboard { 
+     flex: 1; 
+     background: #1a1a1a; 
+     padding: 20px; 
+     border-radius: 10px; 
+     border: 2px solid #edaf19; 
+     max-height: 600px; 
+     overflow-y: auto;
+ }
+
+#history-list { 
+     list-style: none; 
+     padding: 0; 
+}
+
+#history-list li {
+      background: #333; 
+      margin-bottom: 10px; 
+      padding: 10px; 
+      border-radius: 5px; 
+      font-size: 13px; 
+      border-left: 5px solid #edaf19; 
+     }
+
+button { 
+     margin-top: 30px; 
+     padding: 15px 60px; 
+     font-size: 22px; 
+     font-weight: bold; 
+     cursor: pointer; 
+     background: #edaf19; 
+     color: #1a1a1a; 
+     border: none; 
+     border-radius: 50px; 
+     transition: transform 0.2s, background 0.2s; 
+}
+
+button:hover {
+      background: #f39c12; 
+      transform: scale(1.05); 
+     }
+
+button:disabled { 
+     background: #777; 
+     cursor: not-allowed;
+ }
