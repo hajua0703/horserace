@@ -33,23 +33,27 @@ body {
      background-size: 100px 100%; 
 }
 
-.horse { 
-     position: absolute; 
-     left: 0; font-size: 30px;
-      transition: left 0.1s linear; 
-      z-index: 2; 
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-      }
+.horse {
+    position: absolute;
+    left: 0;
+    width: 80px;
+    height: 60px;
+    /* 부드러운 움직임을 위해 transition 추가 (값은 짧게) */
+    transition: left 0.1s linear; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.finish-line { 
-     position: absolute;
-      right: 20px; 
-      top: 0; 
-      bottom: 0;
-       width: 10px; 
-       background: red;
-        box-shadow: 0 0 10px #ff0000; 
-     }
+.finish-line {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    width: 15px;
+    background: red; /* 요청하신 대로 깔끔한 빨간색 */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); /* 은은한 붉은 광채 */
+}
      
 #scoreboard { 
      flex: 1; 
