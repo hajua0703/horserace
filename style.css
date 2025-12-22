@@ -1,0 +1,9 @@
+/* 트랙을 화면 가득 채우기 */
+        #main-container { width: 95%; max-width: 1200px; } 
+        #track-area { flex: 3; min-height: 500px; }
+        
+        /* 결승선 근처에서 긴장감을 주기 위해 배경에 눈금 추가 */
+        .lane {
+            background-image: linear-gradient(to right, #eee 1px, transparent 1px);
+            background-size: 50px 100%; /* 50px마다 세로줄 */
+        }
