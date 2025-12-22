@@ -75,28 +75,24 @@
             startBtn.disabled = true;
 
             const horses = document.querySelectorAll('.horse');
-            // 1. 트랙 길이를 더 길게 느껴지도록 설정 (CSS에서 트랙 너비를 100%로 하고 끝 지점을 큼직하게 잡음)
             const trackWidth = trackArea.clientWidth - 80; 
             let finishedHorses = [];
             
             // 초기화
             horses.forEach(h => h.style.left = '0px');
 
-            // 2. 30초 내외로 맞추기 위한 로직 (랜덤 가속도 추가)
             const timer = setInterval(() => {
                 horses.forEach(horse => {
                     let currentPos = parseFloat(horse.style.left);
                     
                     if (currentPos < trackWidth) {
-                        // 3. 흥미진진한 랜덤 이동: 0~1.5px 사이로 이동 (아주 조금씩 이동하여 오래 걸리게 함)
-                        // 중간에 갑자기 빨리 가는 '스퍼트' 확률 추가
-                        let boost = Math.random() > 0.95 ? 2.5 : 0; // 5% 확률로 스퍼트
-                        let move = (Math.random() * 1.2) + boost; 
+                        // 기본 속도를 높이고(2~5px), 10% 확률로 강력한 스퍼트(10px) 추가
+                        let boost = Math.random() > 0.90 ? (Math.random() * 10) : 0; 
+                        let move = (Math.random() * 5) + 2 + boost; 
                         
                         let newPos = currentPos + move;
                         horse.style.left = newPos + 'px';
 
-                        // 골인 지점 확인
                         if (newPos >= trackWidth && !finishedHorses.includes(horse.id.replace('horse', ''))) {
                             finishedHorses.push(horse.id.replace('horse', ''));
                         }
@@ -107,7 +103,7 @@
                     clearInterval(timer);
                     saveResult(finishedHorses);
                 }
-            }, 50); // 0.05초마다 실행
+            }, 50); 
         };
 
         // [기능 3] 결과 저장
