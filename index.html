@@ -38,12 +38,20 @@
         let isRacing = false;
 
         // 말 생성
-        for (let i = 1; i <= horseCount; i++) {
-            const lane = document.createElement('div');
-            lane.className = 'lane';
-            lane.innerHTML = `<div class="horse" id="horse${i}" style="left: 0px;">🐎<sup>${i}</sup></div>`;
-            trackArea.appendChild(lane);
-        }
+        // 기존의 trackArea.appendChild(lane) 부분을 아래로 교체하세요.
+for (let i = 1; i <= horseCount; i++) {
+    const lane = document.createElement('div');
+    lane.className = 'lane';
+    
+    // 이모티콘 🐎을 지우고, <img> 태그를 넣었습니다.
+    lane.innerHTML = `
+        <div class="horse" id="horse${i}" style="left: 0px;">
+            <img src="말${i}.png" style="width: 70px; height: auto;">
+            <sup style="position: absolute; top: -10px; left: 0; color: white;">${i}</sup>
+        </div>`;
+    
+    trackArea.appendChild(lane);
+}
 
         // 초기 데이터 로드
         loadHistory();
