@@ -33,16 +33,36 @@ body {
      background-size: 100px 100%; 
 }
 
+/* 말이 담긴 컨테이너를 한 덩어리로 만듭니다 */
+.horse-container {
+    display: flex;
+    align-items: center; /* 번호와 이미지를 세로 중앙 정렬 */
+    gap: 5px;            /* 번호와 이미지 사이의 간격 */
+}
+
+/* 말 번호 스타일 */
+.horse-number {
+    font-weight: bold;
+    font-size: 18px;
+    color: #ffffff;      /* 번호 색상 (배경에 맞춰 조절) */
+    text-shadow: 2px 2px 4px #000000; /* 번호가 잘 보이도록 그림자 추가 */
+    min-width: 25px;     /* 번호가 차지하는 최소 너비 */
+    text-align: right;
+}
+
+/* 말 이미지 스타일 */
+.horse-img {
+    width: 80px;         /* 말 크기 조절 */
+    height: auto;
+    display: block;
+}
+
+/* 기존 .horse의 내용은 유연하게 유지 */
 .horse {
     position: absolute;
     left: 0;
-    width: 80px;
-    height: 60px;
-    /* 부드러운 움직임을 위해 transition 추가 (값은 짧게) */
-    transition: left 0.1s linear; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: left 0.1s linear;
+    z-index: 2;
 }
 
 .finish-line {
