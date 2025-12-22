@@ -7,21 +7,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
-    <h1>🐎 말달리자 🐎</h1>
-
-    <div id="main-container">
-        <div id="track-area">
-            <div class="finish-line"></div>
-            </div>
-
-        <div id="scoreboard">
-            <h3>🏆 경기 기록 🏆</h3>
-            <ul id="history-list">
-                <li>데이터 로딩 중...</li>
-            </ul>
-        </div>
+    <div class="header-image">
+        <img src="title.png" alt="경마 게임" style="width: 300px;"> 
     </div>
+
+    <div id="track-area"></div>
+
+    <button id="start-btn">경주 시작!</button>
+
+    <div id="results">
+        <h3>📊 경기 기록</h3>
+        <ul id="record-list"></ul>
+    </div>
+</body>
 
     <button id="start-btn">경마 시작!</button>
 

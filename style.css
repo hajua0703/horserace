@@ -13,14 +13,30 @@ body {
      margin-top: 10px; 
 }
 
-#track-area { 
-     flex: 3;
-     background: #444; 
-     padding: 20px 10px; 
-     border: 4px solid #edaf19; 
-     position: relative; 
-     border-radius: 10px; 
-     box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+/* 트랙 너비를 늘림 */
+#track-area {
+    width: 95%;        /* 화면의 95%를 사용해서 트랙을 길게 만듭니다 */
+    max-width: 1200px; /* 너무 넓어지지 않게 최대치 설정 */
+    margin: 20px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #fff;
+    position: relative;
+    padding-right: 50px; /* 피니시 라인 여유 공간 */
+}
+
+/* 제목 이미지 중앙 정렬 */
+.header-image {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 아래로 옮긴 기록실 디자인 */
+#results {
+    margin-top: 30px;
+    width: 80%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
 }
 
 .lane { 
