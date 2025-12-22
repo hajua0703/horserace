@@ -70,41 +70,56 @@
 
         // [기능 2] 경기 시작
         startBtn.onclick = () => {
-            if (isRacing) return;
-            isRacing = true;
-            startBtn.disabled = true;
+    if (isRacing) return;
+    isRacing = true;
+    startBtn.disabled = true;
 
-            const horses = document.querySelectorAll('.horse');
-            const trackWidth = trackArea.clientWidth - 80; 
-            let finishedHorses = [];
+    const horses = document.querySelectorAll('.horse');
+    const trackWidth = trackArea.clientWidth - 100; // 이미지 크기를 고려해 여유값 조정
+    let finishedHorses = [];
+
+    // 초기화 및 이미지 설정 (파일 이름이 horse1.gif ~ horse10.gif 일 때)
+    horses.forEach((h, i) => {
+        h.style.left = '0px';
+        h.innerHTML = `<img src="말${i + 1}.png" style="width: 80px; height: auto;">`;
+    });
+
+    const timer = setInterval(() => {
+        horses.forEach(horse => {
+            let currentPos = parseFloat(horse.style.left);
             
-            // 초기화
-            horses.forEach(h => h.style.left = '0px');
+            if (currentPos < trackWidth) {
+                let move = 0;
+                let progress = currentPos / trackWidth; // 경주 진행률 (0 ~ 1)
 
-            const timer = setInterval(() => {
-                horses.forEach(horse => {
-                    let currentPos = parseFloat(horse.style.left);
-                    
-                    if (currentPos < trackWidth) {
-                        // 기본 속도를 높이고(2~5px), 10% 확률로 강력한 스퍼트(10px) 추가
-                        let boost = Math.random() > 0.90 ? (Math.random() * 10) : 0; 
-                        let move = (Math.random() * 5) + 2 + boost; 
-                        
-                        let newPos = currentPos + move;
-                        horse.style.left = newPos + 'px';
-
-                        if (newPos >= trackWidth && !finishedHorses.includes(horse.id.replace('horse', ''))) {
-                            finishedHorses.push(horse.id.replace('horse', ''));
-                        }
-                    }
-                });
-
-                if (finishedHorses.length === horseCount) {
-                    clearInterval(timer);
-                    saveResult(finishedHorses);
+                if (progress < 0.5) {
+                    // [전반부] 격차가 많이 나도록 운의 요소를 강하게 넣음 (0~8px 이동)
+                    move = Math.random() * 8;
+                } else {
+                    // [후반부] 역전의 서막! 뒤처진 말들에게 보너스 확률 부여
+                    // 15% 확률로 슈퍼 스퍼트(15px 이동) 발생
+                    let spurt = Math.random() > 0.85 ? (Math.random() * 15) : (Math.random() * 5);
+                    move = 2 + spurt;
                 }
-            }, 50); 
-        };
+                
+                let newPos = currentPos + move;
+                horse.style.left = newPos + 'px';
+
+                // 피니시 라인 통과 판정
+                if (newPos >= trackWidth && !finishedHorses.includes(horse.id.replace('horse', ''))) {
+                    finishedHorses.push(horse.id.replace('horse', ''));
+                }
+            }
+        });
+
+        if (finishedHorses.length === 10) {
+            clearInterval(timer);
+            saveResult(finishedHorses);
+            isRacing = false;
+            startBtn.disabled = false;
+        }
+    }, 50); // 0.05초마다 갱신
+};
 
         // [기능 3] 결과 저장
         async function saveResult(ranks) {
