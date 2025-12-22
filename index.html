@@ -2,155 +2,30 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>산솦's 경마 게임</title>
     <link rel="stylesheet" href="style.css"> 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="header-image">
-        <img src="title.png" alt="경마 게임" style="width: 300px;"> 
+
+    <div class="header-image" style="text-align: center; margin: 20px;">
+        <img src="말달리자.png" alt="경마 게임" style="width: 300px;"> 
     </div>
 
-    <div id="track-area"></div>
+    <div id="track-area">
+        </div>
 
-    <button id="start-btn">경주 시작!</button>
+    <div style="text-align: center; margin: 20px;">
+        <button id="start-btn">경주 시작!</button>
+    </div>
 
     <div id="results">
-        <h3>📊 경기 기록</h3>
-        <ul id="record-list"></ul>
+        <h3>경기 기록 - TOP 3</h3>
+        <ul id="record-list">
+            </ul>
     </div>
-</body>
 
-    <button id="start-btn">경마 시작!</button>
-
-    <script>
-        // 1. Supabase 설정
-        const SUPABASE_URL = 'https://zwgznwoywgvlyujbmdwx.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3Z3pud295d2d2bHl1amJtZHd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5NTEyNTMsImV4cCI6MjA4MTUyNzI1M30.m_7wSDQZLNFgJzY5Xq4HcJbCJmRyp9D4s4wTWtNp0Mc';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const trackArea = document.getElementById('track-area');
-        const startBtn = document.getElementById('start-btn');
-        const historyList = document.getElementById('history-list');
-        const horseCount = 10;
-        let isRacing = false;
-
-       for (let i = 1; i <= horseCount; i++) {
-    const lane = document.createElement('div');
-    lane.className = 'lane';
-    
-    // 이미지와 번호를 horse-box라는 그룹으로 묶었습니다.
-    lane.innerHTML = `
-        <div class="horse" id="horse${i}" style="left: 0px;">
-            <div class="horse-container">
-                <span class="horse-number">${i}</span>
-                <img src="말${i}.png" class="horse-img">
-            </div>
-        </div>`;
-    
-    trackArea.appendChild(lane);
-}
-
-        // 초기 데이터 로드
-        loadHistory();
-
-        // [기능 1] 기록 불러오기
-        async function loadHistory() {
-            const { data, error } = await _supabase
-                .from('race_results')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                historyList.innerHTML = '<li>연결 설정을 확인하세요.</li>';
-                return;
-            }
-
-            historyList.innerHTML = '';
-            data.forEach((row, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<strong>${data.length - index}R</strong>: ${row.ranks}`;
-                historyList.appendChild(li);
-            });
-        }
-
-        // [기능 2] 경기 시작
-        startBtn.onclick = () => {
-    if (isRacing) return;
-    isRacing = true;
-    startBtn.disabled = true;
-
-    const horses = document.querySelectorAll('.horse');
-    const trackWidth = trackArea.clientWidth - 100; 
-    let finishedHorses = [];
-
-    // 위치 초기화
-    horses.forEach((h) => {
-        h.style.left = '0px';
-    });
-
-    const timer = setInterval(() => {
-        horses.forEach(horse => {
-            let currentPos = parseFloat(horse.style.left);
-            
-            if (currentPos < trackWidth) {
-                let progress = currentPos / trackWidth; // 경주 진행률 (0 ~ 1)
-                let move = 0;
-
-                if (progress < 0.6) {
-                    // [전반부] 간격을 넓히기 위해 운의 범위를 크게 설정 (0px ~ 12px)
-                    // 어떤 말은 아예 멈춰 있고, 어떤 말은 쑥쑥 나갑니다.
-                    move = Math.random() * 12; 
-                } else {
-                    // [후반부] 60% 지점 통과 후 역전 로직
-                    // 뒤처진 말일수록 더 높은 확률로 '슈퍼 부스트' 발생
-                    let rankBonus = (trackWidth - currentPos) / trackWidth * 10; // 뒤에 있을수록 보너스 증가
-                    let isSpurt = Math.random() > 0.8; // 20% 확률로 스퍼트
-                    
-                    move = (Math.random() * 5) + (isSpurt ? 15 + rankBonus : 0);
-                }
-                
-                let newPos = currentPos + move;
-                // 피니시 라인을 넘지 않게 보정
-                if (newPos > trackWidth) newPos = trackWidth;
-                
-                horse.style.left = newPos + 'px';
-
-                // 골인 판정
-                const horseId = horse.id.replace('horse', '');
-                if (newPos >= trackWidth && !finishedHorses.includes(horseId)) {
-                    finishedHorses.push(horseId);
-                }
-            }
-        });
-
-        if (finishedHorses.length === 10) {
-            clearInterval(timer);
-            saveResult(finishedHorses); // Supabase 저장 함수 호출
-            isRacing = false;
-            startBtn.disabled = false;
-        }
-    }, 50); 
-};
-
-        // [기능 3] 결과 저장
-        async function saveResult(ranks) {
-            const rankString = ranks.join(' > ');
-            
-            // 현재 몇 라운드인지 계산 (기록 개수 + 1)
-            const { count } = await _supabase.from('race_results').select('*', { count: 'exact', head: true });
-            
-            const { error } = await _supabase
-                .from('race_results')
-                .insert([{ round: (count || 0) + 1, ranks: rankString }]);
-
-            if (error) console.error('저장 실패:', error);
-            
-            await loadHistory();
-            isRacing = false;
-            startBtn.disabled = false;
-            alert("경기 종료! 결과가 기록되었습니다.");
-        }
-    </script>
+    <script src="horserace.js"></script>
 </body>
 </html>
