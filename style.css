@@ -1,18 +1,37 @@
 /* 기본 배경 및 폰트 */
-body { 
-    font-family: 'Pretendard', sans-serif; 
-    display: flex; flex-direction: column; 
-    align-items: center; background: rgb(119, 26, 26); 
-    color: rgb(255, 255, 255); margin: 0; padding: 20px; 
+/* 트랙 전체 너비 확장 */
+
+/* 트랙 구역에 상대 위치 설정 확인 */
+#track-area {
+    position: relative; /* 이게 있어야 피니시 라인이 트랙 안에 고정됩니다 */
+    overflow: hidden;   /* 말이 트랙 밖으로 나가지 않게 함 */
+    width: 2500px;        
+    max-width: 100%; 
+    margin: 20px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #fff;
+    position: relative;
+    padding-right: 50px; 
 }
 
-/* 상단 제목 이미지 */
-.header-image {
-    text-align: center;
-    margin-top: 20px;
+
+/* 화면 전체에 가로 스크롤이 생기도록 부모 설정 */
+body {
+    display: block;       /* flex 해제하여 가로 스크롤 허용 */
+    overflow-x: auto;     /* 가로 스크롤바 활성화 */
+    padding: 20px;
+    min-width: 2600px;    /* 트랙보다 조금 더 넓게 설정 */
 }
 
-/* 피니시 라인 스타일 */
+.lane {
+    width: 100%;
+    height: 65px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+/* 피니시 라인 위치 조정 */
 .finish-line {
     position: absolute;
     right: 30px;      /* 오른쪽 끝에서 30px 지점에 위치 */
@@ -22,28 +41,12 @@ body {
     background: red;
     z-index: 1;       /* 말보다는 뒤에, 트랙보다는 위에 */
 }
-
-/* 트랙 구역에 상대 위치 설정 확인 */
-#track-area {
-    position: relative; /* 이게 있어야 피니시 라인이 트랙 안에 고정됩니다 */
-    overflow: hidden;   /* 말이 트랙 밖으로 나가지 않게 함 */
-    width: 95%;        
-    max-width: 1200px; 
-    margin: 20px auto;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid #fff;
-    position: relative;
-    padding-right: 50px; 
+/* 상단 제목 이미지 */
+.header-image {
+    text-align: center;
+    margin-top: 20px;
 }
 
-/* 레인 스타일 */
-.lane { 
-    height: 60px; /* 말 크기에 맞춰 약간 키움 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
-    position: relative; 
-    display: flex; 
-    align-items: center; 
-}
 
 /* 말 컨테이너 (번호 + 이미지) */
 .horse-container {

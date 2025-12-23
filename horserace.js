@@ -60,7 +60,8 @@ if (startBtn) {
         startBtn.disabled = true;
 
         const horses = document.querySelectorAll('.horse');
-        const trackWidth = trackArea.clientWidth - 120;
+        // 트랙 끝부분 마진을 줄여 더 끝까지 달리게 함
+        const trackWidth = trackArea.clientWidth - 90; 
         let finishedHorses = [];
 
         horses.forEach((h) => h.style.left = '0px');
@@ -73,16 +74,32 @@ if (startBtn) {
                     let progress = currentPos / trackWidth;
                     let move = 0;
 
-                    if (progress < 0.6) {
-                        move = Math.random() * 13; 
+                    if (progress < 0.4) {
+                        // [초반] 무난한 출발 (0~10px)
+                        move = Math.random() * 10; 
+                    } else if (progress < 0.75) {
+                        // [중반] 격차 발생 (뒤처진 말에게 약간의 보정)
+                        let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
+                        move = (Math.random() * 12) + rubberBand;
                     } else {
-                        let rankBonus = (trackWidth - currentPos) / trackWidth * 15;
-                        let isSpurt = Math.random() > 0.85; 
-                        move = (Math.random() * 6) + (isSpurt ? 18 + rankBonus : 0);
+                        // [후반 75% 이후] 대역전 구간!
+                        // 1. 뒤처진 정도에 따른 강력한 추격 보너스
+                        let catchUpBonus = (trackWidth - currentPos) / 10; 
+                        
+                        // 2. 낮은 확률로 터지는 폭발적 스퍼트 (역전의 핵심)
+                        let burstProbability = Math.random() > 0.92 ? 25 : 0; 
+                        
+                        // 3. 선두권 말들은 가끔 힘이 빠짐 (스테미너 저하 재현)
+                        let staminaDraining = Math.random() > 0.9 ? -5 : 0;
+
+                        move = (Math.random() * 8) + catchUpBonus + burstProbability + staminaDraining;
                     }
                     
                     let newPos = currentPos + move;
+                    // 부드러운 움직임을 위해 최소 이동값 보장
+                    if (newPos <= currentPos) newPos = currentPos + 1; 
                     if (newPos > trackWidth) newPos = trackWidth;
+                    
                     horse.style.left = newPos + 'px';
 
                     const horseId = horse.id.replace('horse', '');
@@ -96,7 +113,7 @@ if (startBtn) {
                 clearInterval(timer);
                 saveResultToSupabase(finishedHorses);
             }
-        }, 50);
+        }, 40); // 50ms -> 40ms로 줄여 속도감 상승
     };
 }
 
