@@ -5,10 +5,10 @@
 #track-area {
     position: relative; /* 이게 있어야 피니시 라인이 트랙 안에 고정됩니다 */
     overflow: hidden;   /* 말이 트랙 밖으로 나가지 않게 함 */
-    width: 2500px;        
+    width: 2000px;        
     max-width: 100%; 
     margin: 20px auto;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgb(139, 45, 45);
     border: 2px solid #fff;
     position: relative;
     padding-right: 50px; 
