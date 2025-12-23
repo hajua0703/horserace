@@ -2,7 +2,7 @@
 body { 
     font-family: 'Pretendard', sans-serif; 
     display: flex; flex-direction: column; 
-    align-items: center; background: rgb(84, 108, 145); 
+    align-items: center; background: rgb(119, 26, 26); 
     color: rgb(255, 255, 255); margin: 0; padding: 20px; 
 }
 
@@ -123,3 +123,13 @@ button:disabled { background: #777; cursor: not-allowed; }
 .rank-1st { color: #ffd700; font-weight: bold; font-size: 1.1em; } /* 금색 */
 .rank-2nd { color: #c0c0c0; font-weight: bold; }                 /* 은색 */
 .rank-3rd { color: #cd7f32; font-weight: bold; }                 /* 동색 */
+
+/* 제목 이미지 크기 키우기 */
+.header-image img {
+    width: 600px;         /* 기존 300px에서 600px로 대폭 확대 */
+    max-width: 90px;      /* 모바일 화면에서도 깨지지 않게 설정 */
+    height: auto;
+    display: block;
+    margin: 0 auto;       /* 가운데 정렬 */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); /* 은은한 후광 효과 (선택사항) */
+}
