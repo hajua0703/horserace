@@ -21,7 +21,7 @@ body {
     overflow-x: auto;     /* 가로 스크롤바 활성화 */
     padding: 20px;
     min-width: 2600px;    /* 트랙보다 조금 더 넓게 설정 */
-    background-color: rgb(187, 125, 125);
+    background-color: rgb(174, 38, 38);
 }
 
 .lane {

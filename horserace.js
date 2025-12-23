@@ -61,13 +61,18 @@ if (startBtn) {
         if (isRacing) return;
         isRacing = true;
         startBtn.disabled = true;
+        startBtn.innerText = '레이싱 중...'; // 버튼 텍스트 변경 (피드백용)
 
         const horses = document.querySelectorAll('.horse');
-        // 트랙 끝부분 마진을 줄여 더 끝까지 달리게 함
-        const trackWidth = trackArea.clientWidth - 90; 
+        // 트랙 끝부분 마진을 조절하여 피니시 라인까지 확실히 달리게 함
+        const trackWidth = trackArea.clientWidth - 100; 
         let finishedHorses = [];
 
-        horses.forEach((h) => h.style.left = '0px');
+        // 말 위치 초기화
+        horses.forEach((h) => {
+            h.style.transition = 'none'; // 경주 중에는 부드러운 전환 해제 (즉각 반응)
+            h.style.left = '0px';
+        });
 
         const timer = setInterval(() => {
             horses.forEach(horse => {
@@ -78,28 +83,34 @@ if (startBtn) {
                     let move = 0;
 
                     if (progress < 0.4) {
-                        // [초반] 무난한 출발 (0~10px)
+                        // [초반] 무난하고 비슷한 출발
                         move = Math.random() * 10; 
                     } else if (progress < 0.75) {
-                        // [중반] 격차 발생 (뒤처진 말에게 약간의 보정)
+                        // [중반] 격차 발생 구간 (고무줄 시스템 적용)
                         let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
                         move = (Math.random() * 12) + rubberBand;
                     } else {
-                        // [후반 75% 이후] 대역전 구간!
-                        // 1. 뒤처진 정도에 따른 강력한 추격 보너스
-                        let catchUpBonus = (trackWidth - currentPos) / 10; 
+                        // [후반 75% 이후] ★운명의 대역전 구간★
                         
-                        // 2. 낮은 확률로 터지는 폭발적 스퍼트 (역전의 핵심)
-                        let burstProbability = Math.random() > 0.92 ? 25 : 0; 
-                        
-                        // 3. 선두권 말들은 가끔 힘이 빠짐 (스테미너 저하 재현)
-                        let staminaDraining = Math.random() > 0.9 ? -5 : 0;
+                        // 1. 하이퍼 추격 보너스: 뒤처진 말일수록 가속도가 기하급수적으로 붙음
+                        let distanceToFinish = trackWidth - currentPos;
+                        let catchUpBonus = Math.pow(distanceToFinish / 80, 2); 
 
-                        move = (Math.random() * 8) + catchUpBonus + burstProbability + staminaDraining;
+                        // 2. 미친 스퍼트: 8% 확률로 초강력 추진력 발생
+                        let superSpurt = Math.random() > 0.92 ? 35 : 0; 
+
+                        // 3. 선두의 저주: 결승선 직전(90% 이상)에서 일정 확률로 급격히 지침
+                        let fatigue = 0;
+                        if (progress > 0.9 && Math.random() > 0.85) {
+                            fatigue = -15; 
+                        }
+
+                        move = (Math.random() * 7) + catchUpBonus + superSpurt + fatigue;
                     }
                     
                     let newPos = currentPos + move;
-                    // 부드러운 움직임을 위해 최소 이동값 보장
+
+                    // 최소 이동값 보장 및 역주행 방지
                     if (newPos <= currentPos) newPos = currentPos + 1; 
                     if (newPos > trackWidth) newPos = trackWidth;
                     
@@ -112,11 +123,12 @@ if (startBtn) {
                 }
             });
 
-            if (finishedHorses.length === 10) {
+            // 모든 말이 들어오면 종료
+            if (finishedHorses.length === horses.length) {
                 clearInterval(timer);
                 saveResultToSupabase(finishedHorses);
             }
-        }, 40); // 50ms -> 40ms로 줄여 속도감 상승
+        }, 40); // 40ms 주기로 더 박진감 있게 진행
     };
 }
 
