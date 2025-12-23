@@ -87,7 +87,7 @@ if (startBtn) {
                     let mySpurtPoint = 0.5 + (horseSeed / 100); 
 
                     if (progress < 0.4) {
-                        move = Math.random() * 10; 
+                        move = Math.random() * 15; 
                     } else if (progress < mySpurtPoint) {
                         // 스퍼트 전까지는 적당히 따라가는 중반 페이스
                         let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
@@ -100,7 +100,7 @@ if (startBtn) {
                         let catchUpBonus = Math.pow(distanceToFinish / 70, 2.2); 
 
                         // 7% 확률로 터지는 초필살기 (이동 거리 대폭 상승)
-                        let superSpurt = Math.random() > 0.93 ? 55 : 0; 
+                        let superSpurt = Math.random() > 0.93 ? 35 : 0; 
 
                         // 선두권이 지칠 확률도 더 높임 (0.9 지점 통과 시)
                         let fatigue = (progress > 0.9 && Math.random() > 0.65) ? -25 : 0;
