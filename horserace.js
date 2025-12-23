@@ -47,9 +47,12 @@ async function saveResultToSupabase(ranks) {
     } else {
         alert(`🏁 경기 종료! ${nextRound}라운드 결과가 저장되었습니다.`);
         loadHistory();
+        
+        // 경기 종료 후 1초 뒤에 말들을 제자리로 보냅니다.
+        setTimeout(() => {
+            resetRace();
+        }, 1000);
     }
-    isRacing = false;
-    startBtn.disabled = false;
 }
 
 // 5. 경기 시작 로직
