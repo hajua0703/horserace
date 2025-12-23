@@ -61,7 +61,6 @@ if (startBtn) {
         if (isRacing) return;
         isRacing = true;
         startBtn.disabled = true;
-        startBtn.innerText = '레이싱 중...';
 
         const horses = document.querySelectorAll('.horse');
         const trackWidth = trackArea.clientWidth - 100; 
@@ -88,10 +87,6 @@ if (startBtn) {
                     if (progress < 0.4) {
                         // [초반] 무난한 출발
                         move = Math.random() * 10; 
-                    } else if (progress < mySpurtPoint) {
-                        // [중반] 본인의 스퍼트 지점 전까지는 고무줄 시스템으로 격차 유지
-                        let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
-                        move = (Math.random() * 12) + rubberBand;
                     } else {
                         // [후반] 각자 다른 타이밍에 터지는 ★개별 대역전 구간★
                         
