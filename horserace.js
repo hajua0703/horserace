@@ -32,37 +32,6 @@ function initHorses() {
     }
 }
 
-// 3. 기록판 불러오기 (표 형식으로 1~3등만 표시)
-async function loadHistory() {
-    const { data, error } = await _supabase
-        .from('race_results')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('기록 로드 실패:', error);
-        return;
-    }
-
-    if (recordBody) {
-        recordBody.innerHTML = '';
-        data.forEach((row) => {
-            const tr = document.createElement('tr');
-            
-            // 저장된 순위 문자열을 배열로 변환 (", " 구분자 기준)
-            const ranksArray = row.ranks.split(', ');
-            
-            // 1~3등 데이터만 추출하여 테이블 행 생성
-            tr.innerHTML = `
-                <td>${row.round}R</td>
-                <td class="rank-1st">${ranksArray[0]}번</td>
-                <td class="rank-2nd">${ranksArray[1]}번</td>
-                <td class="rank-3rd">${ranksArray[2]}번</td>
-            `;
-            recordBody.appendChild(tr);
-        });
-    }
-}
 
 // 4. 경기 결과 저장
 async function saveResultToSupabase(ranks) {
