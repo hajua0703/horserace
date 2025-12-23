@@ -11,7 +11,13 @@ let isRacing = false;
 
 // 2. 말 생성 및 초기화
 function initHorses() {
-    trackArea.innerHTML = ''; 
+    trackArea.innerHTML = ''; // 기존 트랙 초기화
+
+    // 🚩 피니시 라인 생성 코드 추가
+    const finishLine = document.createElement('div');
+    finishLine.className = 'finish-line';
+    trackArea.appendChild(finishLine);
+
     for (let i = 1; i <= horseCount; i++) {
         const lane = document.createElement('div');
         lane.className = 'lane';
