@@ -91,41 +91,9 @@ button {
 button:hover { background: #f39c12; transform: scale(1.05); }
 button:disabled { background: #777; cursor: not-allowed; }
 
-/* 📊 경기 기록 표 스타일 */
-#results {
-    margin-top: 30px;
-    width: 95%;
-    max-width: 800px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 15px;
-    border: 2px solid #edaf19;
-}
-
-#results h3 { text-align: center; margin-top: 0; color: #edaf19; }
-
-#rank-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: white;
-    text-align: center;
-}
-
-#rank-table th, #rank-table td {
-    padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#rank-table th { background: rgba(237, 175, 25, 0.2); color: #edaf19; }
-
-/* 순위별 텍스트 강조 */
-.rank-1st { color: #ffd700; font-weight: bold; font-size: 1.1em; } /* 금색 */
-.rank-2nd { color: #c0c0c0; font-weight: bold; }                 /* 은색 */
-.rank-3rd { color: #cd7f32; font-weight: bold; }                 /* 동색 */
-
 /* 제목 이미지 크기 키우기 */
 .header-image img {
-    width: 1200px;         /* 기존 300px에서 600px로 대폭 확대 */
+    width: 2500px;         /* 기존 300px에서 600px로 대폭 확대 */
     max-width: 100%;      /* 모바일 화면에서도 깨지지 않게 설정 */
     height: auto;
     display: block;
