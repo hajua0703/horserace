@@ -70,6 +70,8 @@ if (startBtn) {
         horses.forEach((h) => {
             h.style.transition = 'none';
             h.style.left = '0px';
+            // [중요] 경기 시작 시점에 각 말에게 '오늘의 컨디션'을 부여 (0.4 ~ 0.9 사이 랜덤 스퍼트 지점)
+            h.dataset.spurtPoint = (Math.random() * 0.5) + 0.4; 
         });
 
         const timer = setInterval(() => {
@@ -81,31 +83,30 @@ if (startBtn) {
                     let progress = currentPos / trackWidth;
                     let move = 0;
 
-                    // [개인화 극대화] 스퍼트 시작점을 0.5(절반)에서 0.9(직전)까지 아주 크게 분산
-                    // 말 번호마다 완전히 다른 운명을 가집니다.
-                    let horseSeed = (parseInt(horseId) * 17) % 40; 
-                    let mySpurtPoint = 0.5 + (horseSeed / 100); 
+                    // 이전에 저장한 '오늘의 랜덤 스퍼트 지점'을 가져옵니다.
+                    let mySpurtPoint = parseFloat(horse.dataset.spurtPoint);
 
-                    if (progress < 0.4) {
-                        move = Math.random() * 15; 
+                    if (progress < 0.3) {
+                        // [초반] 순수 랜덤 (누가 치고 나갈지 모름)
+                        move = Math.random() * 10; 
                     } else if (progress < mySpurtPoint) {
-                        // 스퍼트 전까지는 적당히 따라가는 중반 페이스
-                        let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
-                        move = (Math.random() * 11) + rubberBand;
+                        // [중반] 기본 속도 + 약간의 랜덤 가속
+                        move = (Math.random() * 11) + (Math.random() * 3);
                     } else {
-                        // [개별 대역전] 여기서부터는 말마다 터지는 타이밍이 다름!
+                        // [후반 개별 스퍼트]
                         let distanceToFinish = trackWidth - currentPos;
                         
-                        // 뒤처진 말일수록 더 '미친듯이' 달려드는 보너스 (제곱근 활용)
-                        let catchUpBonus = Math.pow(distanceToFinish / 70, 2.2); 
+                        // 1. 추격 보너스 (제곱근으로 뒤처진 말에게 기회 부여)
+                        let catchUpBonus = Math.pow(distanceToFinish / 80, 2); 
 
-                        // 7% 확률로 터지는 초필살기 (이동 거리 대폭 상승)
-                        let superSpurt = Math.random() > 0.93 ? 35 : 0; 
+                        // 2. 실시간 로또 스퍼트 (매 프레임 5% 확률로 터짐)
+                        // 특정 말이 정해진 게 아니라, 달리는 매 순간 확률을 계산합니다.
+                        let realTimeLuck = Math.random() > 0.95 ? (Math.random() * 40 + 20) : 0;
 
-                        // 선두권이 지칠 확률도 더 높임 (0.9 지점 통과 시)
-                        let fatigue = (progress > 0.9 && Math.random() > 0.65) ? -25 : 0;
+                        // 3. 선두의 저주 (지침 현상) - 매 프레임 확률 계산
+                        let fatigue = (progress > 0.85 && Math.random() > 0.92) ? -30 : 0;
 
-                        move = (Math.random() * 9) + catchUpBonus + superSpurt + fatigue;
+                        move = (Math.random() * 8) + catchUpBonus + realTimeLuck + fatigue;
                     }
                     
                     let newPos = currentPos + move;
