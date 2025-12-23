@@ -61,6 +61,7 @@ if (startBtn) {
         if (isRacing) return;
         isRacing = true;
         startBtn.disabled = true;
+        startBtn.innerText = '레이싱 중...';
 
         const horses = document.querySelectorAll('.horse');
         const trackWidth = trackArea.clientWidth - 100; 
@@ -80,31 +81,34 @@ if (startBtn) {
                     let progress = currentPos / trackWidth;
                     let move = 0;
 
-                    // [개별 설정] 말마다 스퍼트가 터지는 시점을 다르게 계산 (0.7 ~ 0.85 사이)
-                    let horseSeed = (parseInt(horseId) * 13) % 15; 
-                    let mySpurtPoint = 0.7 + (horseSeed / 100); 
+                    // [개인화 극대화] 스퍼트 시작점을 0.5(절반)에서 0.9(직전)까지 아주 크게 분산
+                    // 말 번호마다 완전히 다른 운명을 가집니다.
+                    let horseSeed = (parseInt(horseId) * 17) % 40; 
+                    let mySpurtPoint = 0.5 + (horseSeed / 100); 
 
                     if (progress < 0.4) {
-                        // [초반] 무난한 출발
                         move = Math.random() * 10; 
+                    } else if (progress < mySpurtPoint) {
+                        // 스퍼트 전까지는 적당히 따라가는 중반 페이스
+                        let rubberBand = (trackWidth - currentPos) / trackWidth * 5;
+                        move = (Math.random() * 11) + rubberBand;
                     } else {
-                        // [후반] 각자 다른 타이밍에 터지는 ★개별 대역전 구간★
-                        
-                        // 1. 하이퍼 추격 보너스: 거리가 멀수록 제곱으로 가속
+                        // [개별 대역전] 여기서부터는 말마다 터지는 타이밍이 다름!
                         let distanceToFinish = trackWidth - currentPos;
-                        let catchUpBonus = Math.pow(distanceToFinish / 90, 1.8); 
+                        
+                        // 뒤처진 말일수록 더 '미친듯이' 달려드는 보너스 (제곱근 활용)
+                        let catchUpBonus = Math.pow(distanceToFinish / 70, 2.2); 
 
-                        // 2. 랜덤 폭발력: 매 순간이 아니라 4%의 낮은 확률로 아주 강하게 (45px)
-                        let superSpurt = Math.random() > 0.96 ? 45 : 0; 
+                        // 7% 확률로 터지는 초필살기 (이동 거리 대폭 상승)
+                        let superSpurt = Math.random() > 0.93 ? 55 : 0; 
 
-                        // 3. 선두의 저주: 결승선 직전에서 지칠 확률
-                        let fatigue = (progress > 0.92 && Math.random() > 0.7) ? -20 : 0;
+                        // 선두권이 지칠 확률도 더 높임 (0.9 지점 통과 시)
+                        let fatigue = (progress > 0.9 && Math.random() > 0.65) ? -25 : 0;
 
-                        move = (Math.random() * 8) + catchUpBonus + superSpurt + fatigue;
+                        move = (Math.random() * 9) + catchUpBonus + superSpurt + fatigue;
                     }
                     
                     let newPos = currentPos + move;
-
                     if (newPos <= currentPos) newPos = currentPos + 1; 
                     if (newPos > trackWidth) newPos = trackWidth;
                     

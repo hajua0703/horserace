@@ -83,6 +83,7 @@ body {
     left: 0;
     transition: left 0.1s linear;
     z-index: 2;
+    transition: left 0.1s linear;
 }
 
 /* 시작 버튼 */
